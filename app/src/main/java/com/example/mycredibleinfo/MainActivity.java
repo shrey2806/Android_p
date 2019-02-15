@@ -1,5 +1,6 @@
 package com.example.mycredibleinfo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -80,6 +81,7 @@ public class    MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginAndSignup> call, Response<LoginAndSignup> response) {
                 Toast.makeText(MainActivity.this,"Signup Successful",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Please login to continue",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -98,7 +100,11 @@ public class    MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"No such User",Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_LONG).show();
 
+                Intent i=new Intent(MainActivity.this,PersonalDetails.class);
+                startActivity(i);
+                finish();
 
             }
 
