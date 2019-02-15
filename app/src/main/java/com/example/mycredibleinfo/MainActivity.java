@@ -7,13 +7,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mycredibleinfo.APISettings.ApiService;
+import com.example.mycredibleinfo.APISettings.ApiUtils;
 import com.example.mycredibleinfo.PojoClasses.LoginAndSignup;
 import com.example.mycredibleinfo.PojoClasses.ServerTest;
-
-import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +33,7 @@ public class    MainActivity extends AppCompatActivity {
         login_btn=findViewById(R.id.login_btn);
         signup_btn=findViewById(R.id.signup_btn);
 
-         mservice=ApiUtils.getUserService();
+         mservice= ApiUtils.getUserService();
 
          //Testing server
          checkServer();
@@ -101,9 +100,12 @@ public class    MainActivity extends AppCompatActivity {
                     return;
                 }
                 Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_LONG).show();
+                String id=response.body().getData().getId();
 
                 Intent i=new Intent(MainActivity.this,PersonalDetails.class);
+                i.putExtra("id",id);
                 startActivity(i);
+
                 finish();
 
             }

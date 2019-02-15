@@ -1,4 +1,4 @@
-package com.example.mycredibleinfo;
+package com.example.mycredibleinfo.APISettings;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
