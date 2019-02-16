@@ -6,22 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".PersonalDetails">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/pr_image"
+        android:layout_width="105dp"
+        android:layout_height="107dp"
+        android:layout_marginStart="153dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="153dp"
+        android:layout_marginBottom="1dp"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="164dp"
         android:layout_marginEnd="8dp"
         android:text="@string/personal_details"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/ed_organisation"
+        android:id="@+id/prd_organisation"
         android:layout_width="299dp"
         android:layout_height="57dp"
         android:layout_marginStart="8dp"
@@ -36,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/ed_course"
+        android:id="@+id/prd_designation"
         android:layout_width="302dp"
         android:layout_height="53dp"
         android:layout_marginStart="8dp"
@@ -48,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.311"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_organisation" />
+        app:layout_constraintTop_toBottomOf="@+id/prd_organisation" />
 
     <EditText
         android:id="@+id/ed_location"
@@ -93,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.322"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_course" />
+        app:layout_constraintTop_toBottomOf="@+id/prd_designation" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

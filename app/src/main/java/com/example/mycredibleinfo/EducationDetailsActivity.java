@@ -36,8 +36,8 @@ public class EducationDetailsActivity extends AppCompatActivity {
         mservice= ApiUtils.getUserService();
         id=getIntent().getIntExtra("id",id);
 
-        org_etx=findViewById(R.id.ed_organisation);
-        course_etx=findViewById(R.id.ed_course);
+        org_etx=findViewById(R.id.prd_organisation);
+        course_etx=findViewById(R.id.prd_designation);
         location_etx=findViewById(R.id.ed_location);
 
         start_year=findViewById(R.id.ed_spinner_start_year);
@@ -89,9 +89,9 @@ public class EducationDetailsActivity extends AppCompatActivity {
 
             }
         });
-
-
-
     }
+
+
+
 }
 

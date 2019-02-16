@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.mycredibleinfo.APISettings.ApiService;
 import com.example.mycredibleinfo.APISettings.ApiUtils;
-import com.example.mycredibleinfo.EducationDetailPOJOS.EducationDetails;
 import com.example.mycredibleinfo.PersonalDetailPOJOS.PersonalDetails2;
 
 import retrofit2.Call;
@@ -32,8 +31,8 @@ public class PersonalDetails extends AppCompatActivity {
 
          id=Integer.valueOf(getIntent().getStringExtra("id"));
 
-        fullname_etx=findViewById(R.id.ed_organisation);
-        email_etx=findViewById(R.id.ed_course);
+        fullname_etx=findViewById(R.id.prd_organisation);
+        email_etx=findViewById(R.id.prd_designation);
         mobile_etx=findViewById(R.id.pd_mobile);
         location_etx=findViewById(R.id.ed_location);
         links_etx=findViewById(R.id.pd_links);

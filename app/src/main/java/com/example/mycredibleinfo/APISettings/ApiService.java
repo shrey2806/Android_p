@@ -6,6 +6,8 @@ import com.example.mycredibleinfo.PersonalDetailPOJOS.PersonalDetails2;
 import com.example.mycredibleinfo.PersonalDetails;
 import com.example.mycredibleinfo.PojoClasses.LoginAndSignup;
 import com.example.mycredibleinfo.PojoClasses.ServerTest;
+import com.example.mycredibleinfo.ProfessionalDetailPOJOS.ProfessionalDetailData;
+import com.example.mycredibleinfo.ProfessionalDetailPOJOS.ProfessionalDetails;
 import com.example.mycredibleinfo.User;
 
 import retrofit2.Call;
@@ -35,6 +37,9 @@ public interface ApiService {
     @POST("user/educationdetail/{id}")
     Call<EducationDetailsData> addEducationDetails(@Path("id")int id,@Body EducationDetails educationDetails);
 
+
+    @POST("user/professionaldetail/{id}")
+    Call<ProfessionalDetailData> addProfessionalDetails(@Path("id")int id, @Body ProfessionalDetails professionalDetails);
 
 
 }
