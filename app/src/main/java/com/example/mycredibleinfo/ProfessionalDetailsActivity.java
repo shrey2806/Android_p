@@ -17,7 +17,6 @@ import com.example.mycredibleinfo.ProfessionalDetailPOJOS.ProfessionalDetails;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +46,7 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
         mservice= ApiUtils.getUserService();
 
         organizationEditText=findViewById(R.id.prd_organisation);
-        designationEditText=findViewById(R.id.prd_designation);
+        designationEditText=findViewById(R.id.pr_designation);
         startMonthSpinner=findViewById(R.id.prd_start_spinner_month);
         startYearSpinner=findViewById(R.id.prd_start_spinner_year);
         endMonthSpinner=findViewById(R.id.prd_end_spinner_month);
