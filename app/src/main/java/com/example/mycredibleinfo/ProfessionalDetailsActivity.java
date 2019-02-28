@@ -1,13 +1,19 @@
 package com.example.mycredibleinfo;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mycredibleinfo.APISettings.ApiService;
 import com.example.mycredibleinfo.APISettings.ApiUtils;
@@ -23,6 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.view.View.GONE;
+import static com.example.mycredibleinfo.MainActivity.MY_PREF;
 
 public class ProfessionalDetailsActivity extends AppCompatActivity {
 
@@ -35,6 +42,8 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
     private String startDate,endDate;
     private Button save;
 
+    TextView endtext;
+
     int id;
 
     ApiService mservice;
@@ -45,17 +54,17 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
 
         mservice= ApiUtils.getUserService();
 
-        organizationEditText=findViewById(R.id.prd_organisation);
-        designationEditText=findViewById(R.id.pr_designation);
-        startMonthSpinner=findViewById(R.id.prd_start_spinner_month);
-        startYearSpinner=findViewById(R.id.prd_start_spinner_year);
-        endMonthSpinner=findViewById(R.id.prd_end_spinner_month);
-        endYearSpinner=findViewById(R.id.prd_end_spinner_year);
+        organizationEditText=(EditText)findViewById(R.id.prd_organisation);
+        designationEditText=(EditText)findViewById(R.id.pr_designation);
+        startMonthSpinner=(Spinner)findViewById(R.id.prd_start_spinner_month);
+        startYearSpinner=(Spinner)findViewById(R.id.prd_start_spinner_year);
+        endMonthSpinner=(Spinner)findViewById(R.id.prd_end_spinner_month);
+        endYearSpinner=(Spinner)findViewById(R.id.prd_end_spinner_year);
+        endtext=findViewById(R.id.end_text);
+        save=(Button)findViewById(R.id.prd_save);
 
-        save=findViewById(R.id.prd_save);
 
-
-        currCheckBox=findViewById(R.id.prd_checkbox);
+        currCheckBox=(CheckBox) findViewById(R.id.prd_checkbox);
 
         currCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,17 +72,32 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
                 if(currCheckBox.isChecked()){
                     endMonthSpinner.setVisibility(GONE);
                     endYearSpinner.setVisibility(GONE);
-
+                    endtext.setVisibility(GONE);
                 }
                 else if(!currCheckBox.isChecked()){
                     endMonthSpinner.setVisibility(View.VISIBLE);
                     endYearSpinner.setVisibility(View.VISIBLE);
-
+                    endtext.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        id=getIntent().getIntExtra("id",0);
+       // id=getIntent().getIntExtra("id",0);
+        SharedPreferences preferences=this.getSharedPreferences(MY_PREF,MODE_PRIVATE);
+        id=preferences.getInt("userid",0);
+
+
+        Toolbar mtoolbar=findViewById(R.id.profess_toolbar);
+
+        final String isUpdate = getIntent().getStringExtra("isUpdate");
+        if (isUpdate == null)
+            mtoolbar.setTitle("Set Proffessional Details");
+        else {
+            mtoolbar.setTitle("Edit Professional Details");
+            getProfessionalDetails();
+            // getProfilePic();
+        }
+
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +125,43 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
                 endDate=endMonth+"/"+endYear;
 
                 ProfessionalDetails professionalDetails=new ProfessionalDetails(endDate,organization,designation,startDate);
-                saveProfessionalDetails(professionalDetails);
+                //saveProfessionalDetails(professionalDetails);
+
+                if (isUpdate == null)
+                    saveProfessionalDetails(professionalDetails);
+                else {
+                    updateProfessionalDetails(professionalDetails);
+                }
 
             }
         });
 
 
+    }
+
+    private void getProfessionalDetails() {
+
+
+        Call<ProfessionalDetailData> call = mservice.retrieveProfessionalDetails(id);
+        call.enqueue(new Callback<ProfessionalDetailData>() {
+            @Override
+            public void onResponse(Call<ProfessionalDetailData> call, Response<ProfessionalDetailData> response) {
+                if(response.body() != null) {
+                    organizationEditText.setText(response.body().getData().getOrganisation());
+                    designationEditText.setText(response.body().getData().getDesignation());
+                    startMonthSpinner.setSelection(getIndex(startMonthSpinner, response.body().getData().getStart_date().substring(0, 3)));
+                    startYearSpinner.setSelection(getIndex(startYearSpinner, response.body().getData().getStart_date().substring(5)));
+                    endMonthSpinner.setSelection(getIndex(endMonthSpinner, response.body().getData().getEnd_date().substring(0, 3)));
+                    endYearSpinner.setSelection(getIndex(endYearSpinner, response.body().getData().getEnd_date().substring(5)));
+                } else {
+                    showToast("Professional Details Response Empty", Toast.LENGTH_LONG);
+                }
+            }
+            @Override
+            public void onFailure(Call<ProfessionalDetailData> call, Throwable t) {
+                showToast("Response Failed: " + t.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
     }
 
     private void saveProfessionalDetails(ProfessionalDetails professionalDetails) {
@@ -116,7 +171,11 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProfessionalDetailData> call, Response<ProfessionalDetailData> response) {
                 //Put intent for user home activity;
+                Intent n=new Intent(ProfessionalDetailsActivity.this,DisplayActivity.class);
+                n.putExtra("id",id);
+                startActivity(n);
 
+                finish();
 
             }
 
@@ -127,6 +186,37 @@ public class ProfessionalDetailsActivity extends AppCompatActivity {
         });
     }
 
+    public void updateProfessionalDetails(final ProfessionalDetails professionalDetails)
+    {
+        Call<ProfessionalDetailData> call = mservice.updateProfessionalDetails(id, professionalDetails);
+        call.enqueue(new Callback<ProfessionalDetailData>() {
+            @Override
+            public void onResponse(Call<ProfessionalDetailData> call, Response<ProfessionalDetailData> response) {
+                showToast("Professional Details Updated", Toast.LENGTH_SHORT);
+                Intent intent = new Intent(ProfessionalDetailsActivity.this, DisplayActivity.class);
+                finish();
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<ProfessionalDetailData> call, Throwable t) {
+                showToast("Update Professional details Failed: " + t.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    private int getIndex(Spinner spinner, String myString){
+        for (int i = 0; i < spinner.getCount(); i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+    public void showToast(String msg, int length)
+    {
+        Toast.makeText(this, msg, length).show();
+    }
 
     private String findDate(){
         DateFormat df=new SimpleDateFormat("dd/MM/yyyy");

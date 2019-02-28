@@ -1,9 +1,11 @@
 package com.example.mycredibleinfo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,8 @@ public class    MainActivity extends AppCompatActivity {
     private Button login_btn,signup_btn;
     private String email,pass;
     ApiService mservice;
+
+    public static  final  String MY_PREF="My_Preference";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,8 +106,16 @@ public class    MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_LONG).show();
                 String id=response.body().getData().getId();
 
+                SharedPreferences.Editor editor=getSharedPreferences(MY_PREF,MODE_PRIVATE).edit();
+                editor.putInt("userid",Integer.parseInt(id));
+                editor.putString("userEmail",email);
+                editor.apply();
+
+                Log.d("Id genrated is :",id);
+
                 Intent i=new Intent(MainActivity.this,PersonalDetails.class);
                 i.putExtra("id",id);
+
                 startActivity(i);
 
                 finish();
